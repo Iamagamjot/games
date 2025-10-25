@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(to top, #7ec8e3 0%, #b9ecff 100%);
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+  position: relative;
+}
+
+/* Animated realistic sky background */
+.sky {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  animation: floatClouds linear infinite;
+}
+
+.cloud.small { width: 120px; height: 60px; animation-duration: 40s; top: 20%; }
+.cloud.medium { width: 200px; height: 100px; animation-duration: 60s; top: 35%; }
+.cloud.large { width: 250px; height: 120px; animation-duration: 80s; top: 10%; }
+
+@keyframes floatClouds {
+  0% { transform: translateX(-300px); }
+  100% { transform: translateX(120vw); }
+}
+
+/* Birds */
+.bird {
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  background: transparent;
+  animation: flyBirds linear infinite;
+}
+.bird::before, .bird::after {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 4px;
+  background: black;
+  top: 10px;
+  border-radius: 2px;
+}
+.bird::before { transform: rotate(30deg); left: 5px; }
+.bird::after { transform: rotate(-30deg); right: 5px; }
+
+@keyframes flyBirds {
+  0% { transform: translateX(-50px); }
+  100% { transform: translateX(110vw); }
+}
+
+.title {
+  font-size: 3rem;
+  color: #004d00;
+  text-shadow: 0 0 12px #ffffff, 0 0 20px #66fcf1;
+  margin-bottom: 10px;
+  z-index: 2;
+}
+
+/* Scoreboard */
+#scoreboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  background: #004d00;
+  border: 5px solid #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #000;
+  padding: 15px 30px;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 28px;
+  z-index: 2;
+}
+
+.score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+}
+
+.label {
+  font-size: 20px;
+  color: #66fcf1;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 15px;
+  z-index: 2;
+}
+
+button {
+  background: #45a29e;
+  border: none;
+  color: white;
+  padding: 16px 40px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 0 15px #1f2833;
+  transition: transform 0.2s, background 0.2s;
+}
+
+button:hover {
+  background: #66fcf1;
+  color: #0b0c10;
+  transform: scale(1.1);
+}
+
+canvas {
+  border-radius: 12px;
+  margin-top: 20px;
+  box-shadow: 0 0 30px #0b0c10;
+  z-index: 1;
+}
+
+#winner {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 50px;
+  color: #004d00;
+  display: none;
+  text-align: center;
+  text-shadow: 0 0 20px #ffffff;
+  z-index: 3;
+}
