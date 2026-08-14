@@ -57,7 +57,7 @@ function drawBat(x, y, radius, color) {
 function drawBall(x, y, size) {
   ctx.beginPath();
   ctx.arc(x, y, size, 0, Math.PI * 2);
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "#ff0000";
   ctx.shadowColor = "rgba(0,0,0,0.3)";
   ctx.shadowBlur = 10;
   ctx.fill();
