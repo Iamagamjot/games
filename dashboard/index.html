@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Galaxy Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="dashboard-shell">
+    <aside class="side-panel">
+      <h1>Game Galaxy</h1>
+      <p class="subtitle">Futuristic mini games for curious kids</p>
+      <nav class="game-list">
+        <button class="game-tab active">Stacking Lab</button>
+        <button class="game-tab" disabled>Shape Runner · soon</button>
+        <button class="game-tab" disabled>Memory Orbit · soon</button>
+      </nav>
+    </aside>
+
+    <main class="game-panel">
+      <header>
+        <h2>Stacking Lab</h2>
+        <p>Drag colorful blocks and stack them on the glowing tower base.</p>
+      </header>
+
+      <section class="stats">
+        <article>
+          <span class="label">Current Stack</span>
+          <span id="currentStack">0</span>
+        </article>
+        <article>
+          <span class="label">Best Stack</span>
+          <span id="bestStack">0</span>
+        </article>
+        <article>
+          <span class="label">Mission</span>
+          <span id="missionText">Stack all 6 blocks</span>
+        </article>
+      </section>
+
+      <section class="stacking-game">
+        <div id="towerZone" class="tower-zone" aria-label="Stacking tower zone">
+          <div class="tower-base"></div>
+          <div class="tower-guide"></div>
+        </div>
+        <div id="blockTray" class="block-tray" aria-label="Block tray"></div>
+      </section>
+
+      <footer class="controls">
+        <button id="resetBtn">Reset</button>
+        <button id="shuffleBtn">Shuffle Colors</button>
+      </footer>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
