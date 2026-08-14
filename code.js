@@ -5,65 +5,6 @@ const player = { x: 150, y: canvas.height / 2, radius: 35, color: "red", score: 
 const ai = { x: canvas.width - 150, y: canvas.height / 2, radius: 35, color: "blue", score: 0 };
 const ball = { x: canvas.width / 2, y: canvas.height / 2, size: 20, speedX: 6, speedY: 5 };
 
-// --- Lightweight Web Audio for crowd ambience and hit sounds ---
-let audioCtx = null;
-let crowdBuffer = null;
-let crowdNode = null;
-
-function initAudio() {
-  if (audioCtx) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const sampleRate = audioCtx.sampleRate;
-  const duration = 3; // seconds
-  crowdBuffer = audioCtx.createBuffer(1, sampleRate * duration, sampleRate);
-  const data = crowdBuffer.getChannelData(0);
-  for (let i = 0; i < data.length; i++) {
-    data[i] = (Math.random() * 2 - 1) * 0.25; // low-volume noise
-  }
-}
-
-function startCrowd() {
-  if (!audioCtx || crowdNode) return;
-  crowdNode = audioCtx.createBufferSource();
-  crowdNode.buffer = crowdBuffer;
-  crowdNode.loop = true;
-  const lowpass = audioCtx.createBiquadFilter();
-  lowpass.type = 'lowpass';
-  lowpass.frequency.value = 1200;
-  const gain = audioCtx.createGain();
-  gain.gain.value = 0.08; // subtle ambience
-  crowdNode.connect(lowpass);
-  lowpass.connect(gain);
-  gain.connect(audioCtx.destination);
-  crowdNode.start();
-}
-
-function stopCrowd() {
-  if (!crowdNode) return;
-  try { crowdNode.stop(); } catch (e) {}
-  crowdNode.disconnect();
-  crowdNode = null;
-}
-
-function playHitSound(x) {
-  if (!audioCtx) return;
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  const pan = audioCtx.createStereoPanner && audioCtx.createStereoPanner();
-  const panValue = (x - canvas.width / 2) / (canvas.width / 2);
-  if (pan) pan.pan.value = Math.max(-1, Math.min(1, panValue));
-  osc.type = 'square';
-  osc.frequency.value = 700 + Math.random() * 400;
-  gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.01);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-  if (pan) osc.connect(gain); gain.connect(pan); pan.connect(audioCtx.destination);
-  if (!pan) osc.connect(gain); gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.28);
-}
-
-
 const playerScoreEl = document.getElementById("playerScore");
 const aiScoreEl = document.getElementById("aiScore");
 const winnerDisplay = document.getElementById("winner");
@@ -105,6 +46,7 @@ function drawTable() {
 function drawBat(x, y, radius, color) {
   ctx.fillStyle = "#8b4513";
   ctx.fillRect(x - 5, y + radius, 10, 30);
+  ctx.beginPath();
   ctx.arc(x, y, radius, 0, Math.PI * 2);
   ctx.fillStyle = color;
   ctx.fill();
@@ -151,7 +93,6 @@ function update() {
   if (distP < player.radius + ball.size) {
     ball.speedX = Math.abs(ball.speedX);
     ball.speedY = dyP * 0.3;
-    try { playHitSound(ball.x); } catch (e) {}
   }
 
   // AI collision
@@ -161,7 +102,6 @@ function update() {
   if (distA < ai.radius + ball.size) {
     ball.speedX = -Math.abs(ball.speedX);
     ball.speedY = dyA * 0.3;
-    try { playHitSound(ball.x); } catch (e) {}
   }
 
   // Score
@@ -202,12 +142,6 @@ gameLoop();
 // Buttons
 startBtn.addEventListener("click", () => {
   if (!gameOver) {
-    // Allow audio to start after a user gesture
-    try {
-      initAudio();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      startCrowd();
-    } catch (e) {}
     gameRunning = true;
     gamePaused = false;
     winnerDisplay.style.display = "none";
@@ -231,9 +165,4 @@ restartBtn.addEventListener("click", () => {
   winnerDisplay.style.display = "none";
   playerScoreEl.textContent = 0;
   aiScoreEl.textContent = 0;
-  try {
-    initAudio();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    startCrowd();
-  } catch (e) {}
 });
