@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏓 Ping Pong</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ui-container">
+    <h1 class="title">🏓 Ping Pong</h1>
+
+    <div id="scoreboard">
+      <div class="score-box">
+        <span class="label">PLAYER</span>
+        <span id="playerScore">0</span>
+      </div>
+      <div class="score-box">
+        <span class="label">COMPUTER</span>
+        <span id="aiScore">0</span>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="startBtn">Start</button>
+      <button id="pauseBtn">Pause</button>
+      <button id="restartBtn">Restart</button>
+    </div>
+  </div>
+
+  <div id="winner"></div>
+  <canvas id="gameCanvas" width="900" height="500"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
