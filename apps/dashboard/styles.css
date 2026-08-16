@@ -1,0 +1,77 @@
+:root {
+  --bg-1: #090f2d;
+  --bg-2: #10193f;
+  --card: rgba(12, 21, 56, 0.85);
+  --line: rgba(106, 190, 255, 0.4);
+  --text: #edf3ff;
+  --muted: #a8b8e8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at 10% 20%, #1c2f74 0%, var(--bg-1) 55%),
+    linear-gradient(135deg, var(--bg-2), #070b1f);
+}
+
+.dashboard {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 2.4rem;
+}
+
+.hero p {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.game-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.game-card h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.game-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.play-link {
+  width: fit-content;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+
+.play-link:hover {
+  box-shadow: 0 0 12px rgba(106, 190, 255, 0.45);
+}
