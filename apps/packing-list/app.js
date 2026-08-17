@@ -1,10 +1,12 @@
 const STORAGE_KEY = "packing-list:v1";
 
 const form = document.getElementById("itemForm");
+const itemTopic = document.getElementById("itemTopic");
 const itemName = document.getElementById("itemName");
 const itemQuantity = document.getElementById("itemQuantity");
 const itemCategory = document.getElementById("itemCategory");
 const itemList = document.getElementById("itemList");
+const topicSuggestions = document.getElementById("topicSuggestions");
 const emptyState = document.getElementById("emptyState");
 const totalCount = document.getElementById("totalCount");
 const packedCount = document.getElementById("packedCount");
@@ -47,9 +49,23 @@ function formatQuantity(quantity) {
   return quantity > 1 ? `${quantity}x` : "1x";
 }
 
+function normalizeTopic(topic) {
+  return topic.trim().replace(/\s+/g, " ");
+}
+
+function getTopicName(item) {
+  return item.topic || "General";
+}
+
+function getTopics() {
+  return Array.from(new Set(state.map((item) => getTopicName(item)))).sort((a, b) =>
+    a.localeCompare(b)
+  );
+}
+
 function getEmptyStateMessage() {
   if (state.length === 0) {
-    return "Add your first packing item to get started.";
+    return "Create a topic and start adding small items.";
   }
 
   if (currentFilter === "packed") {
@@ -70,87 +86,131 @@ function render() {
     if (currentFilter === "unpacked") return !item.packed;
     return true;
   });
+  const groupedItems = visibleItems.reduce((groups, item) => {
+    const topic = getTopicName(item);
+    if (!groups.has(topic)) {
+      groups.set(topic, []);
+    }
+    groups.get(topic).push(item);
+    return groups;
+  }, new Map());
 
   totalCount.textContent = state.length;
   packedCount.textContent = packedItems.length;
   remainingCount.textContent = state.length - packedItems.length;
 
   itemList.innerHTML = "";
+  topicSuggestions.innerHTML = "";
 
   emptyState.textContent = getEmptyStateMessage();
   emptyState.classList.toggle("is-hidden", visibleItems.length > 0);
   clearPackedBtn.disabled = packedItems.length === 0;
+  getTopics().forEach((topic) => {
+    const option = document.createElement("option");
+    option.value = topic;
+    topicSuggestions.appendChild(option);
+  });
 
   if (visibleItems.length === 0) {
     return;
   }
 
-  visibleItems.forEach((item) => {
-    const li = document.createElement("li");
-    li.className = `item ${item.packed ? "packed" : ""}`;
-    if (item.id === lastAddedId) {
-      li.classList.add("item-enter");
-    }
+  groupedItems.forEach((items, topic) => {
+    const group = document.createElement("section");
+    group.className = "topic-group";
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.setAttribute("aria-label", `Mark ${item.name} as packed`);
-    checkbox.checked = item.packed;
-
-    const main = document.createElement("div");
-    main.className = "item-main";
+    const header = document.createElement("header");
+    header.className = "topic-header";
 
     const title = document.createElement("div");
-    title.className = "item-title";
+    title.className = "topic-title";
 
-    const name = document.createElement("span");
-    name.className = "item-name";
-    name.textContent = item.name;
+    const heading = document.createElement("h2");
+    heading.textContent = topic;
 
-    const meta = document.createElement("div");
-    meta.className = "meta";
+    const count = document.createElement("span");
+    count.className = "topic-count";
+    count.textContent = `${items.length} item${items.length === 1 ? "" : "s"}`;
 
-    const badge = document.createElement("span");
-    badge.className = "badge";
-    badge.textContent = item.category;
+    title.append(heading, count);
+    header.append(title);
+    group.append(header);
 
-    const quantity = document.createElement("span");
-    quantity.textContent = formatQuantity(item.quantity);
+    const list = document.createElement("ul");
+    list.className = "topic-items";
 
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "remove";
-    remove.textContent = "Remove";
+    items.forEach((item) => {
+      const li = document.createElement("li");
+      li.className = `item ${item.packed ? "packed" : ""}`;
+      if (item.id === lastAddedId) {
+        li.classList.add("item-enter");
+      }
 
-    title.append(name);
-    meta.append(badge, quantity);
-    main.append(title, meta);
-    li.append(checkbox, main, remove);
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.setAttribute("aria-label", `Mark ${item.name} in ${topic} as packed`);
+      checkbox.checked = item.packed;
 
-    checkbox.addEventListener("change", () => {
-      state = state.map((current) =>
-        current.id === item.id ? { ...current, packed: !current.packed } : current
-      );
-      saveState();
-      render();
+      const main = document.createElement("div");
+      main.className = "item-main";
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "item-title";
+
+      const name = document.createElement("span");
+      name.className = "item-name";
+      name.textContent = item.name;
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = item.category;
+
+      const quantity = document.createElement("span");
+      quantity.textContent = formatQuantity(item.quantity);
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "remove";
+      remove.textContent = "Remove";
+
+      titleRow.append(name);
+      meta.append(badge, quantity);
+      main.append(titleRow, meta);
+      li.append(checkbox, main, remove);
+
+      checkbox.addEventListener("change", () => {
+        state = state.map((current) =>
+          current.id === item.id ? { ...current, packed: !current.packed } : current
+        );
+        saveState();
+        render();
+      });
+
+      remove.addEventListener("click", () => {
+        state = state.filter((current) => current.id !== item.id);
+        saveState();
+        render();
+      });
+
+      list.appendChild(li);
     });
 
-    remove.addEventListener("click", () => {
-      state = state.filter((current) => current.id !== item.id);
-      saveState();
-      render();
-    });
-
-    itemList.appendChild(li);
+    group.append(list);
+    itemList.appendChild(group);
   });
 }
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
+  const topic = normalizeTopic(itemTopic.value);
   const name = itemName.value.trim();
   const quantity = Number(itemQuantity.value);
   const category = itemCategory.value;
+  const topicName = topic || "General";
 
   if (!name) {
     itemName.focus();
@@ -160,6 +220,7 @@ form.addEventListener("submit", (event) => {
   state = [
     {
       id: crypto.randomUUID(),
+      topic: topicName,
       name,
       quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
       category,
@@ -171,6 +232,7 @@ form.addEventListener("submit", (event) => {
 
   saveState();
   form.reset();
+  itemTopic.value = topic;
   itemQuantity.value = "1";
   itemCategory.value = "Clothing";
   itemName.focus();
