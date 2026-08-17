@@ -34,7 +34,21 @@
     </section>
 
     <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="panel-kicker">Build your checklist</p>
+          <h2>Topics and small things</h2>
+        </div>
+        <p class="panel-note">Create a topic like “Beach trip” or “Carry-on”, then add the little items underneath it.</p>
+      </div>
+
       <form id="itemForm" class="item-form">
+        <label>
+          <span>Topic (optional)</span>
+          <input id="itemTopic" name="itemTopic" type="text" placeholder="Beach trip" maxlength="60" list="topicSuggestions" />
+          <datalist id="topicSuggestions"></datalist>
+        </label>
+
         <label>
           <span>Item</span>
           <input id="itemName" name="itemName" type="text" placeholder="Passport" maxlength="60" required />
@@ -70,7 +84,7 @@
         <button type="button" id="clearPackedBtn" class="ghost">Clear packed</button>
       </div>
 
-      <ul id="itemList" class="item-list" aria-label="Packing items"></ul>
+      <div id="itemList" class="item-list" aria-label="Packing items"></div>
 
       <p id="emptyState" class="empty-state">Add your first packing item to get started.</p>
     </section>
