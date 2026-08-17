@@ -8,6 +8,16 @@ const games = [
     name: "Stacking Lab",
     description: "Drag, drop, and stack all blocks on the tower.",
     href: "../../games/stacking-lab/index.html"
+  },
+  {
+    name: "Reaction Rush",
+    description: "Test how fast you can click when the signal appears.",
+    href: "../../games/reaction-rush/index.html"
+  },
+  {
+    name: "Guess the Number",
+    description: "Try to find the secret number in as few guesses as possible.",
+    href: "../../games/guess-the-number/index.html"
   }
 ];
 

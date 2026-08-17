@@ -7,7 +7,8 @@ This repository is now structured to support multiple games cleanly in one place
 ```text
 games/
 ├── apps/
-│   └── dashboard/          # Launcher/home UI for all games
+│   ├── dashboard/          # Launcher/home UI for all games
+│   └── packing-list/       # Packing list utility app
 ├── games/
 │   ├── ping-pong/          # Ping Pong game
 │   └── stacking-lab/       # Stacking Lab game
