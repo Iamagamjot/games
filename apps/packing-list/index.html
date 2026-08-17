@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Packing List</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="chip">Autosaves locally</p>
+        <p class="eyebrow">Travel planner</p>
+        <h1>Packing List</h1>
+        <p class="intro">Keep your trip essentials organized and mark items as packed when you’re ready to go.</p>
+        <p class="subtle">Built for trips, weekends, and last-minute checklists.</p>
+      </div>
+
+      <div class="summary" aria-live="polite">
+        <div>
+          <span class="summary-label">Items</span>
+          <strong id="totalCount">0</strong>
+        </div>
+        <div>
+          <span class="summary-label">Packed</span>
+          <strong id="packedCount">0</strong>
+        </div>
+        <div>
+          <span class="summary-label">Remaining</span>
+          <strong id="remainingCount">0</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <form id="itemForm" class="item-form">
+        <label>
+          <span>Item</span>
+          <input id="itemName" name="itemName" type="text" placeholder="Passport" maxlength="60" required />
+        </label>
+
+        <label>
+          <span>Qty</span>
+          <input id="itemQuantity" name="itemQuantity" type="number" min="1" max="99" value="1" />
+        </label>
+
+        <label>
+          <span>Category</span>
+          <select id="itemCategory" name="itemCategory">
+            <option>Clothing</option>
+            <option>Toiletries</option>
+            <option>Tech</option>
+            <option>Documents</option>
+            <option>Health</option>
+            <option>Other</option>
+          </select>
+        </label>
+
+        <button type="submit" class="primary">Add item</button>
+      </form>
+
+      <div class="toolbar">
+        <div class="filters" role="tablist" aria-label="Packing list filters">
+          <button type="button" class="filter active" data-filter="all">All</button>
+          <button type="button" class="filter" data-filter="unpacked">Unpacked</button>
+          <button type="button" class="filter" data-filter="packed">Packed</button>
+        </div>
+
+        <button type="button" id="clearPackedBtn" class="ghost">Clear packed</button>
+      </div>
+
+      <ul id="itemList" class="item-list" aria-label="Packing items"></ul>
+
+      <p id="emptyState" class="empty-state">Add your first packing item to get started.</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
