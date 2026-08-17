@@ -100,6 +100,19 @@ body::after {
   height: 180px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(37, 99, 235, 0.14), transparent 70%);
+  animation: floatGlow 7s ease-in-out infinite;
+}
+
+.hero-copy::before {
+  content: "";
+  position: absolute;
+  top: -28px;
+  right: 32px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.18), transparent 68%);
+  animation: floatGlow 9s ease-in-out infinite reverse;
 }
 
 .chip {
@@ -155,6 +168,15 @@ h1 {
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  animation: riseIn 500ms ease both;
+}
+
+.summary div:nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.summary div:nth-child(3) {
+  animation-delay: 180ms;
 }
 
 .summary-label {
@@ -243,6 +265,20 @@ button {
   transform: translateY(-1px);
 }
 
+.primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%);
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.28) 50%, transparent 100%);
+  animation: shimmer 4.5s ease-in-out infinite;
+}
+
 .toolbar {
   display: flex;
   justify-content: space-between;
@@ -286,7 +322,7 @@ button {
 }
 
 .item-enter {
-  animation: popIn 220ms ease-out;
+  animation: popIn 280ms cubic-bezier(0.2, 0.9, 0.25, 1);
 }
 
 .item:hover {
@@ -376,6 +412,36 @@ button {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0) scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  72% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
   }
 }
 
